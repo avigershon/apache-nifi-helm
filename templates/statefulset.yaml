@@ -31,7 +31,7 @@ spec:
 {{ toYaml .Values.nodeSelector | indent 8 }}
 {{- end }}
       securityContext:
-      - runAsUser: 1000
+        runAsUser: 1000
         runAsNonRoot: true
         fsGroup: 2000
       containers:
