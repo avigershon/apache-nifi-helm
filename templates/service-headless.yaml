@@ -11,6 +11,8 @@ spec:
     ports:
     - port: {{ .Values.properties.httpPort }}
       name: http
+    - port: {{ .Values.properties.httpsPort }}
+      name: https
     - port: {{ .Values.properties.clusterPort }}
       name: cluster
     clusterIP: None
