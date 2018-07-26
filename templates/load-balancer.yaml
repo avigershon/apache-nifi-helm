@@ -8,10 +8,10 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-{{- if .Values.service.annotations }}
   annotations:
-{{ toYaml .Values.service.annotations | indent 8 }}
-{{- end }}
+  {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
 spec:
   type: "LoadBalancer"
   ports:
