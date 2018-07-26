@@ -15,6 +15,7 @@ keystorePass: passwordgoeshere
 
 service:
   type: NodePort
+  
   annotations:
     # Note that the backend talks over HTTP.
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
@@ -22,6 +23,7 @@ service:
     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:{region}:{user id}:certificate/{id}
     # Only run SSL on the port named "https" below.
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+    
 properties:
   isNode: true
   httpPort: 8080
