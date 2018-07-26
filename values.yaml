@@ -27,7 +27,7 @@ service:
 properties:
   isNode: true
   httpPort: 8080
-  httpsPort: 8433
+  httpsPort: 8443
   clusterPort: 6007
   provenanceStorage: "8 GB"
   siteToSite:
