@@ -30,6 +30,10 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
 {{- end }}
+      securityContext:
+      - runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 2000
       containers:
       - name: {{ template "apache-nifi.name" . }}-server
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
