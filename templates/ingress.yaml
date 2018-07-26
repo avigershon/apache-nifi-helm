@@ -15,5 +15,5 @@ spec:
       - path: /
         backend:
           serviceName: {{ template "apache-nifi.fullname" . }}-headless
-          servicePort: {{ .Values.properties.httpPort }}
+          servicePort: {{ .Values.properties.httpsPort }}
 {{- end -}}
