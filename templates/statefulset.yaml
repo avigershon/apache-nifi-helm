@@ -44,6 +44,9 @@ spec:
         - containerPort: {{ .Values.properties.httpPort }}
           name: http
           protocol: TCP
+        - containerPort: {{ .Values.properties.httpsPort }}
+          name: https
+          protocol: TCP
         - containerPort: {{ .Values.properties.clusterPort }}
           name: cluster
           protocol: TCP
