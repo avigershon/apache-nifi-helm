@@ -44,9 +44,12 @@
         <property name="Users File">../data/users.xml</property>
         <property name="Legacy Authorized Users File"></property>
 
-        <property name="Initial User Identity 1"></property>
+        <property name="Initial User Identity 1">CN=sys_admin, OU=NIFI</property>
     </userGroupProvider>
-
+    
+    <accessPolicyProvider>
+      <property name="Initial Admin Identity">CN=sys_admin, OU=NIFI</property>
+    </accessPolicyProvider>
     <!--
         The LdapUserGroupProvider will retrieve users and groups from an LDAP server. The users and groups
         are not configurable.
