@@ -13,6 +13,8 @@ spec:
   ports:
     - port: {{ .Values.properties.httpPort }}
       name: http
+    - port: {{ .Values.properties.httpsPort }}
+      name: https
   selector:
     app: {{ template "apache-nifi.name" . }}
     release: {{ .Release.Name }}
