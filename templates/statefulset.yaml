@@ -69,7 +69,8 @@ spec:
           #chown nifi:nifi /opt/nifi/flowfile_repository
           #chown nifi:nifi /opt/nifi/content_repository
           #chown nifi:nifi /opt/nifi/logs
-
+          bin/nifi.sh
+          
           sh "$@"
         resources:
 {{ toYaml .Values.resources | indent 10 }}
