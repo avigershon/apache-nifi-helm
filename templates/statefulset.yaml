@@ -42,38 +42,36 @@ spec:
         - bash
         - -ce
         - |
-          #!/bin/sh
-          set -e
-
-          create_keystore() {
-              echo ${HOST}
-              ${NIFI_TOOLKIT_HOME}/bin/tls-toolkit.sh standalone -n "${HOST}" -S "${KEYSTORE_PASS}" -C "CN=${HOST}, OU=NIFI" -P "${TRUSTSTORE_PASS}" -o "${NIFI_TOOLKIT_HOME}"
-              mv ${NIFI_TOOLKIT_HOME}/${HOST}/keystore.jks ${NIFI_HOME}/conf/keystore.jks
-              chown nifi:nifi ${NIFI_HOME}/conf/keystore.jks
-              mv ${NIFI_TOOLKIT_HOME}/${HOST}/truststore.jks  ${NIFI_HOME}/conf/truststore.jks
-              chown nifi:nifi ${NIFI_HOME}/conf/truststore.jks
+          prop_replace () {
+            target_file=${NIFI_HOME}/conf/nifi.properties
+            echo 'replacing target file ' ${target_file}
+            sed -i -e "s|^$1=.*$|$1=$2|"  ${target_file}
           }
-
-          patch_nifi_properties()  {
-              cat "${NIFI_HOME}/conf/nifi.temp" > "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.web.http.host=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.web.https.host=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.remote.input.host=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.cluster.node.address=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.zookeeper.connect.string=${NIFI_ZOOKEEPER_CONNECT_STRING}" >> "${NIFI_HOME}/conf/nifi.properties"
-          }
-
-          create_keystore
-          patch_nifi_properties
-          #chown nifi:nifi /opt/nifi/data
-          #chown nifi:nifi /opt/nifi/flowfile_repository
-          #chown nifi:nifi /opt/nifi/content_repository
-          #chown nifi:nifi /opt/nifi/logs
-          echo "Starting nifi..."
-          cd ${NIFI_HOME}
-          ./bin/nifi.sh run
+          FQDN=$(hostname -f)
+          cat "${NIFI_HOME}/conf/nifi.temp" > "${NIFI_HOME}/conf/nifi.properties"
+          if [[ $(grep $(hostname) conf/authorizers.temp) ]]; then
+            cat "${NIFI_HOME}/conf/authorizers.temp" > "${NIFI_HOME}/conf/authorizers.xml"
+          else
+            cat "${NIFI_HOME}/conf/authorizers.empty" > "${NIFI_HOME}/conf/authorizers.xml"
+          fi
           
-          sh "$@"
+          prop_replace nifi.remote.input.host ${FQDN}
+          prop_replace nifi.cluster.node.address ${FQDN}
+          prop_replace nifi.zookeeper.connect.string ${NIFI_ZOOKEEPER_CONNECT_STRING}
+{{- if .Values.ca.enabled }}
+          prop_replace nifi.web.https.host ${FQDN}
+
+          prop_replace nifi.security.keystore ${NIFI_BASE_DIR}/data/cert/keystore.jks
+          prop_replace nifi.security.keystorePasswd $(jq -r .keyStorePassword ${NIFI_BASE_DIR}/data/cert/config.json)
+          prop_replace nifi.security.keyPasswd $(jq -r .keyPassword ${NIFI_BASE_DIR}/data/cert/config.json)
+
+          prop_replace nifi.security.truststore ${NIFI_BASE_DIR}/data/cert/truststore.jks
+          prop_replace nifi.security.truststorePasswd $(jq -r .trustStorePassword ${NIFI_BASE_DIR}/data/cert/config.json)
+{{- else }}
+          prop_replace nifi.web.http.host ${FQDN}
+{{- end }}
+
+          exec bin/nifi.sh run
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         ports:
