@@ -70,6 +70,7 @@ spec:
           #chown nifi:nifi /opt/nifi/content_repository
           #chown nifi:nifi /opt/nifi/logs
           echo "Starting nifi..."
+          cd ${NIFI_HOME}
           ./bin/nifi.sh
           
           sh "$@"
