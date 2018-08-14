@@ -43,6 +43,7 @@ spec:
         - -ce
         - |
           #!/bin/sh
+          sudo su -
           set -e
 
           create_keystore() {
