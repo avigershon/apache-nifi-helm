@@ -38,24 +38,6 @@ spec:
       - name: {{ template "apache-nifi.name" . }}-server
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        command:
-        - bash
-        - -ce
-        - |
-          prop_replace () {
-            target_file=${NIFI_HOME}/conf/nifi.properties
-            echo 'replacing target file ' ${target_file}
-            sed -i -e "s|^$1=.*$|$1=$2|"  ${target_file}
-          }
-          FQDN=$(hostname -f)
-          cat "${NIFI_HOME}/conf/nifi.temp" > "${NIFI_HOME}/conf/nifi.properties"
-          
-          prop_replace nifi.remote.input.host ${FQDN}
-          prop_replace nifi.cluster.node.address ${FQDN}
-          prop_replace nifi.zookeeper.connect.string ${NIFI_ZOOKEEPER_CONNECT_STRING}
-          prop_replace nifi.web.http.host ${FQDN}
-
-          exec bin/nifi.sh run
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         ports:
