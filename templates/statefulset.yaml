@@ -43,7 +43,6 @@ spec:
         - -ce
         - |
           #!/bin/sh
-          sudo su -
           set -e
 
           create_keystore() {
@@ -66,10 +65,10 @@ spec:
 
           create_keystore
           patch_nifi_properties
-          chown nifi:nifi /opt/nifi/data
-          chown nifi:nifi /opt/nifi/flowfile_repository
-          chown nifi:nifi /opt/nifi/content_repository
-          chown nifi:nifi /opt/nifi/logs
+          #chown nifi:nifi /opt/nifi/data
+          #chown nifi:nifi /opt/nifi/flowfile_repository
+          #chown nifi:nifi /opt/nifi/content_repository
+          #chown nifi:nifi /opt/nifi/logs
 
           sh "$@"
         resources:
