@@ -71,7 +71,7 @@ spec:
           #chown nifi:nifi /opt/nifi/logs
           echo "Starting nifi..."
           cd ${NIFI_HOME}
-          ./bin/nifi.sh
+          ./bin/nifi.sh run
           
           sh "$@"
         resources:
