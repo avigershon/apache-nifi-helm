@@ -34,18 +34,13 @@ spec:
 {{- end }}
       securityContext:
         runAsUser: 1000
-        runAsNonRoot: true
+        runAsNonRoot: false
         fsGroup: 2000
       containers:
       - name: {{ template "apache-nifi.name" . }}-server
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        args: [/bin/sh, -c, 'cat "${NIFI_HOME}/conf/nifi.temp" > "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.web.http.host=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.web.https.host=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.remote.input.host=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.cluster.node.address=${HOST}.${HEADLESS}" >> "${NIFI_HOME}/conf/nifi.properties"
-              echo "nifi.zookeeper.connect.string=${NIFI_ZOOKEEPER_CONNECT_STRING}" >> "${NIFI_HOME}/conf/nifi.properties"']
+        args: [/bin/sh, -c, 'cat "${NIFI_HOME}/conf/nifi.temp" > "${NIFI_HOME}/conf/nifi.properties"']
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         ports:
