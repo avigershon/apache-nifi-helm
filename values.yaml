@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 # Number of nifi nodes
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: markap14/nifi-node
