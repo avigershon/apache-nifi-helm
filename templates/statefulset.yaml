@@ -132,7 +132,7 @@ spec:
           name: {{ template "apache-nifi.fullname" . }}-config
           items:
             - key: "nifi.properties"
-              path: "nifi.temp"
+              path: "nifi.properties"
       - name: "authorizers-xml"
         configMap:
           name: {{ template "apache-nifi.fullname" . }}-config
