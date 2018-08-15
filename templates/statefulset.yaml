@@ -40,7 +40,6 @@ spec:
       - name: {{ template "apache-nifi.name" . }}-server
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        args: [/bin/sh, -c, 'cat "${NIFI_HOME}/conf/nifi.temp" > "${NIFI_HOME}/conf/nifi.properties"']
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         ports:
