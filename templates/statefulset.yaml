@@ -58,7 +58,7 @@ spec:
         - name: NIFI_CLUSTER_IS_NODE
           value: "true"
         - name: NIFI_WEB_HTTP_PORT
-          value: {{ .Values.properties.httpPort }}
+          value: '{{ .Values.properties.httpPort }}'
         - name: AUTH
           value: "tls"
         - name: KEYSTORE_PATH
